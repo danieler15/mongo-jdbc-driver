@@ -71,7 +71,7 @@ if [[ $OS =~ ^CYGWIN ]]; then
 else
     TMP_DIR="/tmp/run_adf"
 fi
-TIMEOUT=180
+TIMEOUT=20
 JQ=$TMP_DIR/jq
 
 
@@ -259,8 +259,14 @@ if [ $ARG = $START ]; then
     mkdir -p $LOGS_PATH
     mkdir -p $TMP_DIR
 
+    echo "mongodb path: $MONGO_DB_PATH"
+    echo "logs path: $LOGS_PATH"
+    echo "tmp dir: $TMP_DIR"
+
     # Start mongod
     (cd $LOCAL_INSTALL_DIR && curl -O $MONGO_DOWNLOAD_LINK)
+
+    echo "now here"
 
     # Note: ADF has a storage.json file that generates configs for us.
     # The mongodb source is on port $MONGOD_PORT so we use that here.
@@ -273,6 +279,8 @@ if [ $ARG = $START ]; then
     else
       $MONGO_DOWNLOAD_DIR/bin/mongod --port $MONGOD_PORT --dbpath $MONGO_DB_PATH \
         --logpath $LOGS_PATH/mongodb_test.log --pidfilepath $TMP_DIR/${MONGOD}.pid --fork
+
+        echo "now her2"
     fi
 
     waitCounter=0
